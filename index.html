@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Oficina — Quebra-cabeça</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Oficina — Corrida Maluca</h1>
+    <div id="hud">
+      <div id="timer">00:00</div>
+      <div id="moves">Movimentos: 0</div>
+      <button id="embaralhar">Embaralhar / Iniciar</button>
+    </div>
+  </header>
+
+  <main>
+    <div id="puzzle" class="puzzle"></div>
+    <div id="preview" class="preview"></div>
+  </main>
+
+  <script>
+    // parâmetro: caminho da imagem e tamanho da grade (ex.: 4 => 4x4)
+    const IMAGE = '../midia/img/oficina.png';
+    const GRID = 4; 
+  </script>
+  <script src="js/jogo.js"></script>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    background: #eee;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  #player, #obstacle {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+  }
+
+  #player {
+    background: green;
+    left: 50px;
+    top: 100px;
+  }
+
+  #obstacle {
+    background: red;
+    left: 300px;
+    top: 100px;
+  }
+</style>
+</head>
+<body>
+  <div id="player"></div>
+  <div id="obstacle"></div>
+
+  <script>
+    const player = document.getElementById("player");
+    const obstacle = document.getElementById("obstacle");
+
+    let x = 50;
+    let y = 100;
+
+    // Mover com setas
+    document.addEventListener("keydown", (e) => {
+      const speed = 10;
+      if (e.key === "ArrowRight") x += speed;
+      if (e.key === "ArrowLeft") x -= speed;
+      if (e.key === "ArrowUp") y -= speed;
+      if (e.key === "ArrowDown") y += speed;
+
+      player.style.left = x + "px";
+      player.style.top = y + "px";
+
+      detectarColisao();
+    });
+
+    function detectarColisao() {
+      const rect1 = player.getBoundingClientRect();
+      const rect2 = obstacle.getBoundingClientRect();
+
+      if (
+        rect1.left < rect2.right &&
+        rect1.right > rect2.left &&
+        rect1.top < rect2.bottom &&
+        rect1.bottom > rect2.top
+      ) {
+        alert("💥 Colisão detectada!");
+      }
+    }
+  </script>
+</body>
+</html>

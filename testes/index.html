@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Quebra-cabeça — Puzzle de Troca</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --accent:#ffb020;
+    --muted:#94a3b8;
+    --tile-gap:6px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:Inter,system-ui,Segoe UI,Arial;
+    background:linear-gradient(180deg,var(--bg),#08101a 60%);
+    color:#e6eef6;
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    gap:24px;
+    padding:32px;
+  }
+
+  .app {
+    width:100%;
+    max-width:1100px;
+    display:grid;
+    grid-template-columns: 420px 1fr;
+    gap:24px;
+  }
+
+  /* painel lateral de controles */
+  .panel{
+    background:linear-gradient(180deg,var(--card),#081322);
+    padding:18px;
+    border-radius:12px;
+    box-shadow:0 8px 30px rgba(2,6,23,0.6);
+  }
+  .panel h2{margin:0 0 8px;font-size:18px}
+  .control-row{display:flex;gap:8px;align-items:center;margin:10px 0}
+  label{font-size:13px;color:var(--muted)}
+  select,input[type="file"]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.05);background:transparent;color:inherit}
+  button{
+    cursor:pointer;
+    background:var(--accent);
+    border:none;
+    color:#08101a;
+    padding:9px 12px;
+    border-radius:8px;
+    font-weight:600;
+    box-shadow:0 6px 14px rgba(255,176,32,0.14);
+  }
+  .muted{color:var(--muted);font-size:13px}
+
+  /* área do puzzle */
+  .board-card{
+    background:linear-gradient(180deg,#07111a,#05101a);
+    padding:18px;
+    border-radius:12px;
+    min-height:520px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  .board-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .stats{display:flex;gap:12px;align-items:center}
+  .stat{
+    background:rgba(255,255,255,0.03);
+    padding:8px 12px;border-radius:8px;font-weight:600;font-size:14px
+  }
+
+  /* puzzle container */
+  .puzzle-wrap{
+    margin-top:6px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100%;
+  }
+
+  .puzzle{
+    background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
+    border-radius:8px;
+    padding:var(--tile-gap);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
+    display:grid;
+    gap:var(--tile-gap);
+    touch-action:none;
+    user-select:none;
+  }
+
+  .tile{
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+    border-radius:6px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color:transparent; /* não mostrar números por padrão */
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease;
+    box-shadow: 0 6px 12px rgba(2,6,23,0.45);
+  }
+  .tile:active{transform:scale(.98)}
+  .tile.selected{
+    outline:3px solid rgba(255,176,32,0.9);
+    transform:translateY(-4px);
+    color:transparent;
+  }
+  .tile.dragging{
+    opacity:.85;
+    transform:scale(1.02);
+    box-shadow:0 18px 40px rgba(2,6,23,0.65);
+  }
+
+  /* preview small */
+  .preview{
+    width:100%;
+    height:84px;
+    border-radius:8px;
+    background-size:cover;
+    background-position:center;
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);
+    margin-top:8px;
+  }
+
+  /* responsividade */
+  @media(max-width:980px){
+    .app{grid-template-columns:1fr; padding:0}
+    .panel{order:2}
+    .board-card{order:1}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- CONTROLES -->
+  <aside class="panel" aria-label="Controles do puzzle">
+    <h2>Controles</h2>
+    <div class="control-row">
+      <label for="grid">Tamanho da grade:</label>
+      <select id="grid">
+        <option value="3">3 × 3 (fácil)</option>
+        <option value="4" selected>4 × 4 (padrão)</option>
+        <option value="5">5 × 5 (difícil)</option>
+      </select>
+    </div>
+
+    <div class="control-row">
+      <label for="file">Imagem (ou use a padrão):</label>
+      <input id="file" type="file" accept="image/*">
+    </div>
+
+    <div class="control-row">
+      <button id="startBtn">Iniciar / Embaralhar</button>
+      <button id="resetBtn" style="background:#2a3038;color:#e6eef6">Reset</button>
+    </div>
+
+    <div style="margin-top:12px">
+      <label class="muted">Opções</label>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="previewBtn" style="background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)">Mostrar preview</button>
+        <button id="hintBtn" style="background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--muted)">Mover hint</button>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <label class="muted">Estatísticas</label>
+      <div style="margin-top:8px">
+        <div class="muted">Tempo</div>
+        <div id="timer" class="stat">00:00</div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="muted">Movimentos</div>
+        <div id="moves" class="stat">0</div>
+      </div>
+    </div>
+
+    <div style="margin-top:18px">
+      <label class="muted">Dicas rápidas</label>
+      <ul style="font-size:13px;color:var(--muted);padding-left:18px">
+        <li>Clique numa peça e depois em outra para trocar.</li>
+        <li>Arraste e solte também funciona.</li>
+        <li>Use a pré-visualização para ver a imagem completa.</li>
+      </ul>
+    </div>
+
+  </aside>
+
+  <!-- ÁREA DO PUZZLE -->
+  <main class="board-card" aria-live="polite">
+    <div class="board-header">
+      <h2 style="margin:0">Quebra-cabeça — Montagem</h2>
+      <div class="stats">
+        <div class="stat" id="status">Pronto</div>
+      </div>
+    </div>
+
+    <div class="puzzle-wrap">
+      <!-- a div .puzzle terá grid definido dinamicamente pelo JS -->
+      <div id="puzzle" class="puzzle" role="application" aria-label="Área do quebra-cabeça"></div>
+    </div>
+
+    <div id="preview" class="preview" aria-hidden="true" title="Preview da imagem"></div>
+  </main>
+</div>
+
+<script>
+/*
+  Puzzle de troca:
+  - Cria tiles com background-position para simular o corte da imagem.
+  - Suporta clique->clique para trocar e drag/drop.
+  - Contador de movimentos e cronômetro.
+  - Preview e "mover hint" (move 1 peça para posição correta).
+*/
+
+(() => {
+  // elementos DOM
+  const puzzleEl = document.getElementById('puzzle');
+  const gridSelect = document.getElementById('grid');
+  const fileInput = document.getElementById('file');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const movesEl = document.getElementById('moves');
+  const timerEl = document.getElementById('timer');
+  const statusEl = document.getElementById('status');
+  const previewEl = document.getElementById('preview');
+  const previewBtn = document.getElementById('previewBtn');
+  const hintBtn = document.getElementById('hintBtn');
+
+  // estado
+  let grid = parseInt(gridSelect.value,10);
+  let imageURL = null;
+  let tiles = []; // array de objetos {index, correctIndex, el}
+  let selectedTile = null;
+  let moves = 0;
+  let timerInterval = null;
+  let startTime = null;
+  let solved = false;
+
+  // imagem padrão (base64 tiny placeholder) - substitua pela sua URL se quiser
+  const defaultImage = 'https://images.unsplash.com/photo-1542367597-39b2b9ee245d?q=80&w=1600&auto=format&fit=crop&ixlib=rb-4.0.3&s=45fa3b6d6b6f3bb2f0f3fd2b83a1f2e6';
+
+  function formatTime(ms) {
+    if (!ms) return '00:00';
+    const s = Math.floor(ms/1000);
+    const m = Math.floor(s/60);
+    const sec = s%60;
+    return String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  }
+
+  function startTimer(){
+    if (timerInterval) clearInterval(timerInterval);
+    startTime = Date.now();
+    timerInterval = setInterval(()=>{
+      const elapsed = Date.now() - startTime;
+      timerEl.textContent = formatTime(elapsed);
+    }, 300);
+  }
+  function stopTimer(){ if(timerInterval) clearInterval(timerInterval); timerInterval = null; }
+
+  function resetStats(){
+    moves = 0;
+    movesEl.textContent = moves;
+    timerEl.textContent = '00:00';
+    statusEl.textContent = 'Pronto';
+  }
+
+  function setGrid(n){
+    grid = n;
+    gridSelect.value = n;
+  }
+
+  function buildPuzzle(){
+    // limpa
+    puzzleEl.innerHTML = '';
+    tiles = [];
+    selectedTile = null;
+    solved = false;
+
+    // define dimensões do grid (quadrado)
+    const gap = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--tile-gap')) || 6;
+    puzzleEl.style.gridTemplateColumns = `repeat(${grid}, 1fr)`;
+    puzzleEl.style.width = 'min(720px, calc(100% - 32px))';
+    // para manter proporção: calcular tamanho baseado em largura disponível
+    const width = Math.min(720, puzzleEl.clientWidth || 720);
+    const tileSizePx = `calc((100% - ${(grid-1)*gap}px) / ${grid})`;
+    // criar tiles
+    for (let i=0;i<grid*grid;i++){
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.setAttribute('draggable','true');
+      tile.setAttribute('role','button');
+      tile.setAttribute('tabindex','0');
+      tile.dataset.index = i; // posição atual
+      tile.dataset.correct = i; // posição correta
+      tile.style.minHeight = '60px'; // fallback
+      // adiciona listeners
+      tile.addEventListener('click', onTileClick);
+      tile.addEventListener('keydown', onTileKey);
+      tile.addEventListener('dragstart', onDragStart);
+      tile.addEventListener('dragover', onDragOver);
+      tile.addEventListener('drop', onDrop);
+      tile.addEventListener('dragend', onDragEnd);
+      // guardar
+      puzzleEl.appendChild(tile);
+      tiles.push({index:i, correctIndex:i, el:tile});
+    }
+    applyImageToTiles();
+  }
+
+  function applyImageToTiles(){
+    // aplica background-image e background-position em cada tile
+    const img = imageURL || defaultImage;
+    // set preview
+    previewEl.style.backgroundImage = `url("${img}")`;
+
+    // usando background-position percentual
+    tiles.forEach((t, idx) => {
+      const el = t.el;
+      const cx = (t.correctIndex % grid) / (grid - 1) * 100;
+      const cy = Math.floor(t.correctIndex / grid) / (grid - 1) * 100;
+      // se grid==1 evitar div/0
+      const posX = grid === 1 ? '50%' : `${cx}%`;
+      const posY = grid === 1 ? '50%' : `${cy}%`;
+      el.style.backgroundImage = `url("${img}")`;
+      el.style.backgroundPosition = `${posX} ${posY}`;
+      el.style.backgroundSize = `${grid * 100}% ${grid * 100}%`;
+      // dimensões visuais: manter quadrado responsivo
+      el.style.aspectRatio = '1 / 1';
+      // reset classes
+      el.classList.remove('selected','dragging');
+    });
+  }
+
+  // embaralhar (trocas aleatórias)
+  function shuffleTiles(times=300){
+    const n = tiles.length;
+    for (let i=0;i<times;i++){
+      const a = Math.floor(Math.random()*n);
+      const b = Math.floor(Math.random()*n);
+      swapTileElements(a,b,false);
+    }
+  }
+
+  // troca pelo índice atual (positions)
+  function swapTileElements(posA, posB, countMove=true){
+    if (posA === posB) return;
+    const tileA = tiles[posA];
+    const tileB = tiles[posB];
+    if (!tileA || !tileB) return;
+    // swap dataset index and in array
+    // swap in DOM by replacing nodes
+    const elA = tileA.el;
+    const elB = tileB.el;
+
+    // troca no array tiles
+    tiles[posA] = tileB;
+    tiles[posB] = tileA;
+
+    // atualizar atributo data-index (posição atual)
+    tiles[posA].el.dataset.index = posA;
+    tiles[posB].el.dataset.index = posB;
+
+    // trocar nós na DOM: manipular por inserção
+    const nextSibling = elB.nextSibling === elA ? elB : elB.nextSibling;
+    puzzleEl.insertBefore(elB, elA);
+    puzzleEl.insertBefore(elA, nextSibling);
+
+    if (countMove){
+      moves++;
+      movesEl.textContent = moves;
+      checkSolved();
+    }
+  }
+
+  // encontra posição atual da peça a partir do elemento
+  function findTilePosByEl(el){
+    return tiles.findIndex(t => t.el === el);
+  }
+
+  /* event handlers */
+  function onTileClick(e){
+    const el = e.currentTarget;
+    if (solved) return;
+    // selecionar ou trocar
+    if (!selectedTile){
+      selectedTile = el;
+      el.classList.add('selected');
+    } else if (selectedTile === el){
+      // desseleciona
+      el.classList.remove('selected');
+      selectedTile = null;
+    } else {
+      // trocar selectedTile e el
+      const posA = findTilePosByEl(selectedTile);
+      const posB = findTilePosByEl(el);
+      if (posA >= 0 && posB >= 0){
+        swapTileElements(posA,posB,true);
+      }
+      selectedTile.classList.remove('selected');
+      selectedTile = null;
+    }
+  }
+
+  // teclado: Enter para selecionar/trocar, Space também
+  function onTileKey(e){
+    if (e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      onTileClick(e);
+    }
+  }
+
+  // drag & drop handlers
+  let dragSrc = null;
+  function onDragStart(e){
+    dragSrc = e.currentTarget;
+    e.dataTransfer.effectAllowed = 'move';
+    try { e.dataTransfer.setData('text/plain', 'drag'); } catch (err) {}
+    dragSrc.classList.add('dragging');
+  }
+  function onDragOver(e){
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+  function onDrop(e){
+    e.preventDefault();
+    const target = e.currentTarget;
+    if (!dragSrc || dragSrc === target) return;
+    const posA = findTilePosByEl(dragSrc);
+    const posB = findTilePosByEl(target);
+    if (posA >= 0 && posB >= 0){
+      swapTileElements(posA,posB,true);
+    }
+  }
+  function onDragEnd(e){
+    if (dragSrc) dragSrc.classList.remove('dragging');
+    dragSrc = null;
+  }
+
+  // verifica se todas as tiles estão no lugar correto
+  function checkSolved(){
+    const ok = tiles.every((t, pos) => {
+      // tile's correct index stored em dataset.correct
+      return parseInt(t.el.dataset.correct,10) === pos;
+    });
+    if (ok){
+      solved = true;
+      statusEl.textContent = 'Resolvido! Parabéns 🎉';
+      stopTimer();
+    } else {
+      statusEl.textContent = 'Em andamento';
+    }
+  }
+
+  /* ações de controle */
+  startBtn.addEventListener('click', ()=>{
+    setGrid(parseInt(gridSelect.value,10));
+    buildPuzzle();
+    shuffleTiles(150 + grid*50); // quantidade de trocas varia com grid
+    moves = 0;
+    movesEl.textContent = moves;
+    startTimer();
+    solved = false;
+    statusEl.textContent = 'Embaralhado';
+  });
+
+  resetBtn.addEventListener('click', ()=>{
+    buildPuzzle();
+    resetStats();
+    stopTimer();
+    solved = false;
+  });
+
+  gridSelect.addEventListener('change', e => {
+    setGrid(parseInt(e.target.value,10));
+  });
+
+  // upload de imagem
+  fileInput.addEventListener('change', (e)=>{
+    const f = e.target.files && e.target.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      imageURL = ev.target.result;
+      applyImageToTiles();
+      previewEl.style.backgroundImage = `url("${imageURL}")`;
+    };
+    reader.readAsDataURL(f);
+  });
+
+  // preview toggle
+  let previewShown = true;
+  previewBtn.addEventListener('click', ()=>{
+    previewShown = !previewShown;
+    previewEl.style.display = previewShown ? 'block' : 'none';
+    previewBtn.textContent = previewShown ? 'Ocultar preview' : 'Mostrar preview';
+  });
+
+  // hint: move uma peça para o lugar correto (peça que não está correta)
+  hintBtn.addEventListener('click', ()=>{
+    // encontra uma peça fora do lugar e move para sua posição correta por swap
+    const wrong = tiles.find((t, pos) => parseInt(t.el.dataset.correct,10) !== pos);
+    if (!wrong) return;
+    // posição onde ela deveria estar:
+    const correctPos = parseInt(wrong.el.dataset.correct,10);
+    const currentPos = findTilePosByEl(wrong.el);
+    // swap with tile that currently occupies correctPos
+    swapTileElements(currentPos, correctPos, true);
+  });
+
+  // inicializar
+  function init(){
+    previewShown = true;
+    previewEl.style.display = 'block';
+    imageURL = defaultImage;
+    setGrid(parseInt(gridSelect.value,10));
+    resetStats();
+    buildPuzzle();
+    // embaralhar levemente para que não inicie solucionado
+    shuffleTiles(30);
+  }
+
+  init();
+
+})();
+</script>
+</body>
+</html>
