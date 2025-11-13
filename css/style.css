@@ -145,7 +145,18 @@
   line-height: 40px;
 }
 
-#dificuldade, #nome {
+#dificuldade {
+  margin-top: 5vh;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 10px;
+  height: 4vh;
+  font-family: "Bebas Neue", sans-serif;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#nome{
   margin-top: 5vh;
   font-size: 20px;
   color: #000000;
