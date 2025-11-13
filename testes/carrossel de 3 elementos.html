@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrossel de Corredores</title>
+<style>
+  body {
+    background: #111;
+    color: white;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .carrossel-container {
+    position: relative;
+    width: 660px; /* 3 imagens de 200px + espaçamentos */
+    overflow: hidden;
+  }
+
+  .carrossel-faixa {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+
+  .carrossel-item {
+    min-width: 200px;
+    margin: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .carrossel-item img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .seta {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+
+  .seta:hover {
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .seta.esquerda { left: -50px; }
+  .seta.direita { right: -50px; }
+</style>
+</head>
+<body>
+
+  <h2>Escolha o corredor</h2>
+
+  <div class="carrossel-container">
+    <button class="seta esquerda">⟵</button>
+    <div class="carrossel-faixa" id="faixa">
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?1" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?2" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?3" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?4" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?5" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?6" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?7" alt=""></div>
+      <div class="carrossel-item"><img src="https://picsum.photos/200/120?8" alt=""></div>
+    </div>
+    <button class="seta direita">⟶</button>
+  </div>
+
+<script>
+  const faixa = document.getElementById('faixa');
+  const itens = document.querySelectorAll('.carrossel-item');
+  const totalItens = itens.length;
+  const itensPorVez = 3;
+
+  let indiceAtual = 0;
+
+  document.querySelector('.seta.direita').addEventListener('click', () => {
+    const maxIndice = Math.ceil(totalItens / itensPorVez) - 1;
+    if (indiceAtual < maxIndice) {
+      indiceAtual++;
+      atualizarCarrossel();
+    }
+  });
+
+  document.querySelector('.seta.esquerda').addEventListener('click', () => {
+    if (indiceAtual > 0) {
+      indiceAtual--;
+      atualizarCarrossel();
+    }
+  });
+
+  function atualizarCarrossel() {
+    const deslocamento = -(indiceAtual * (220 * itensPorVez)); 
+    faixa.style.transform = `translateX(${deslocamento}px)`;
+  }
+</script>
+
+</body>
+</html>

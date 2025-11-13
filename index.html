@@ -3,17 +3,21 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Oficina — Quebra-cabeça</title>
+  <title>EL Marco</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/icon"
+    href="midia/img/logo-site.png">
 </head>
 
 <body>
 
   <header id="paginaInicial">
+  <img src="midia/img/seta-direita (2).png" alt="" title="Voltar a pagina Inicial" id="voltar"
+    onclick="window.location.reload()">
     <img src="midia/img/logo-corrida.png" alt="logo corrida-maluca" id="logo-header">
   </header>
   <div id="pi">
-    <h2 id="título"><strong>Bem-vindo à Oficina da Corrida Maluca!</strong></h2>
+    <h2 class="título"><strong>Bem-vindo à Oficina da Corrida Maluca!</strong></h2>
     <p id="texto">
       Monte seu carro peça por peça e prepare-se para a corrida!
 
@@ -27,31 +31,41 @@
       <option value="6" id="medio">Médio (6x6)</option>
       <option value="8" id="dificil">Difícil (8x8)</option>
     </select>
-    <div>
-      <img src="midia/img/dick-option.jpg" alt="dick" id="opção">
-      <img src="midia/img/penélope-option.jpg" alt="penélope" id="opção">
-      <img src="midia/img/lazy-option.png" alt="lazy luke" id="opção">
 
+    <div>
+      <div id="opções">
+        <img src="midia/img/dick-option.jpg" alt="dick" class="opção" id="dick" title="Dick Vigarista">
+        <img src="midia/img/penélope-option.jpg" alt="penélope" class="opção" id="penélope" title="Penélope Charmosa">
+        <img src="midia/img/lazy-option.png" alt="lazy luke" class="opção" id="luke" title="Lazy Luke">
+        <img src="midia/img/prof-option.png" alt="prof" class="opção" id="professor" title="Professor Aéreo">
+        <img src="midia/img/quadrilha-option.png" alt="quadrilha" class="opção" id="quadrilha"
+          title="Quadrilha da Morte">
+        <img src="midia/img/rock-option.png" alt="rock" class="opção" id="irmãos" title="Irmãos Rocha">
+      </div>
     </div>
+
     <p id="texto">Clique em “Jogar” para começar!</p>
 
     <button id="startGame">Iniciar Jogo</button>
   </div>
 
-
   <header id="jogo">
-    <h1 id="gameTitle">Oficina — Corrida Maluca</h1>
+    <h2 id="gameTitle" class="título">Oficina — Corrida Maluca</h2>
     <button id="start">Embaralhar</button>
   </header>
 
   <div id="quebraCabeça">
     <div class="status">
-    <div id="timer">00s</div>
-    <div id="moves">Movimentos: 0</div>
+      <div id="timer">00s</div>
+      <div id="moves">Movimentos: 0</div>
     </div>
     <div id="puzzle" class="puzzle"></div>
     <div id="preview" class="preview"></div>
   </div>
+
+  <footer>
+    <p id="footer">&copy; All copyrights reserved by Marco </p>
+  </footer>
 
   <script>
     // parâmetro: caminho da imagem e tamanho da grade (ex.: 4 => 4x4)

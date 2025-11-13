@@ -1,25 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-:root{
-  --gameSize: 75vw;
+:root {
+  --gameSize: 70vw;
   --optionSize: 10vw;
+  --option-gap: 2vw;
+  /* margem entre imagens (total horizontal por imagem) */
+  --items-visible: 3;
+  --logoheight: 5vw;
 }
 
 
-#logo-header{
-  width: 20vw;
+#logo-header {
   margin: 0 auto;
   padding: 0px;
   display: block;
+  height: var(--logoheight);
 }
 
-#paginaInicial{
+#paginaInicial {
   text-align: center;
   background-color: #7f16cf;
   padding: 0vh 0;
+  
+  position: fixed; /* Fixes the header relative to the viewport */
+  top: 0;          /* Positions the header at the top edge */
+  left: 0;         /* Positions the header at the left edge */
+  width: 100%;     /* Ensures the header spans the entire width */
+  z-index: 999;    /* Places the header above other content (optional, but recommended) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
 }
 
-#startGame{
+#startGame {
   width: 30vw;
   height: 7vh;
   font-size: 25px;
@@ -32,7 +43,7 @@
   font-family: "Bebas Neue", sans-serif;
 }
 
-#start{
+#start {
   width: 30vw;
   height: 7vh;
   font-size: 25px;
@@ -45,28 +56,31 @@
   font-family: "Bebas Neue", sans-serif;
 }
 
-#opção{
+.opção {
   width: var(--optionSize);
   height: var(--optionSize);
-  margin: 20px;
   cursor: pointer;
   object-fit: cover;
+  margin-right: calc(var(--option-gap) / 2);
+  margin-left: calc(var(--option-gap) / 2);
+  border-radius: 8px;
+  margin: 0 5px;
 }
 
-#texto{
+#texto {
   font-size: 17px;
   font-family: "Bebas Neue", sans-serif;
   margin: 0 auto;
 }
 
-#título{
+#título {
   font-size: 40px;
   margin-top: 10vh;
   margin-bottom: 2vh;
   line-height: 40px;
 }
 
-#dificuldade{
+#dificuldade {
   margin-top: 5vh;
   font-size: 20px;
   color: #000000;
@@ -77,15 +91,14 @@
   padding-right: 10px;
 }
 
-#pi{
+#pi {
   margin: 0 auto;
   width: 60vw;
-  padding-bottom: 5vh;
 }
 
 
 
-body{
+body {
   color: rgb(69, 0, 87);
   font-family: "Bebas Neue", sans-serif;
   text-align: center;
@@ -97,7 +110,7 @@ body{
   backdrop-filter: blur(10px);*/
 }
 
-#jogo{
+#jogo {
   text-align: center;
   margin: 0 auto;
 }
@@ -108,7 +121,8 @@ body{
   aspect-ratio: 16/9;
   margin: 20px auto;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 3x3 */
+  grid-template-columns: repeat(4, 1fr);
+  /* 3x3 */
   gap: 0px;
   background-image: url("../midia/img/oficina.png");
   background-size: 100vw;
@@ -122,31 +136,33 @@ body{
   background-repeat: no-repeat;
   cursor: pointer;
 }
+
 .tile:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px #0b58fd;
   border-radius: 3px;
 }
 
-.tile.selecionada{
+.tile.selecionada {
   outline: 3px solid rgb(28, 50, 255);
   transform: scale(1.02);
 }
 
-#timer{
+#timer {
   text-align: left;
 }
 
-#moves{
+#moves {
   text-align: right;
 }
 
-#quebraCabeça{
+#quebraCabeça {
   width: var(--gameSize);
   margin: 0 auto;
 }
 
-.status{
+.status {
+  padding-top: 3vh;
   display: flex;
   justify-content: space-between;
   font-size: 20px;
@@ -154,9 +170,48 @@ body{
   line-height: 0px;
 }
 
-#gameTitle{
+#gameTitle {
   padding-top: 10vw;
   padding-bottom: 3vh;
   margin: 0 auto;
   line-height: 0px;
+}
+
+#opções {
+  display: flex;
+  float: right;
+  justify-content: center;
+  margin-top: 3vh;
+  padding-bottom: 3vh;
+}
+
+#voltar {
+  padding: calc(var(--logoheight)/3);
+  text-align: left;
+  height: calc(var(--logoheight)/5);
+  cursor: pointer;
+  position: absolute;
+  top: 2vh;
+  left: 2vw;
+  transform: rotate(180deg);
+}
+
+footer p {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+footer{
+  bottom: 0;
+  width: 100%;
+  background-color: #e2e2e2;
+  height: 5vh;
+}
+#footer{
+  padding-top: 2vh;
+}
+h2{
+  padding-top: 15vh;
 }
