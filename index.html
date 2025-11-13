@@ -5,15 +5,14 @@
   <meta charset="utf-8">
   <title>EL Marco</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" type="image/icon"
-    href="midia/img/logo-site.png">
+  <link rel="icon" type="image/icon" href="midia/img/logo-site.png">
 </head>
 
 <body>
 
   <header id="paginaInicial">
-  <img src="midia/img/seta-direita (2).png" alt="" title="Voltar a pagina Inicial" id="voltar"
-    onclick="window.location.reload()">
+    <img src="midia/img/seta-direita (2).png" alt="" title="Voltar a pagina Inicial" id="voltar"
+      onclick="window.location.reload()">
     <img src="midia/img/logo-corrida.png" alt="logo corrida-maluca" id="logo-header">
   </header>
   <div id="pi">
@@ -26,6 +25,8 @@
 
       Escolha sua dificuldade, ligue os motores e mostre que você é o verdadeiro mecânico da Corrida Maluca!
     </p>
+
+    <input type="text" placeholder="Escreva seu nome aqui" id="nome">
     <select type="multiple" id="dificuldade" value="Selecionar Dificuldade">
       <option value="4" id="facil">Fácil (4x4)</option>
       <option value="6" id="medio">Médio (6x6)</option>
@@ -61,6 +62,11 @@
     </div>
     <div id="puzzle" class="puzzle"></div>
     <div id="preview" class="preview"></div>
+  </div>
+
+  <div id="ranking-container">
+    <h2>Ranking</h2>
+    <div id="ranking"></div>
   </div>
 
   <footer>

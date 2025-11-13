@@ -1,12 +1,14 @@
+const API_URL = `https://6915c37e465a9144626d7125.mockapi.io/ranking/ranking`;
 const puzzle = document.getElementById("puzzle");
 let gridSize // Tamanho da grade do quebra-cabeça
 let imagem = "midia/img/car-dick.png";
+let pontos;
+let rank;
 
 // Esconder o jogo inicialmente
 document.getElementById("jogo").style.display = "none";
 document.querySelector(".status").style.display = "none";
 puzzle.style.display = "none";
-
 
 // Selecionar imagem para o jogo
 let opcImg = document.querySelectorAll(".opção");
@@ -14,6 +16,10 @@ let opcImg = document.querySelectorAll(".opção");
 opcImg.forEach(img => {
   img.addEventListener("click", imagemA);
 });
+
+exibirRanking();
+window.onload = exibirRanking;
+
 
 function imagemA(event) {
   // Remove a seleção anterior (se existir)
@@ -40,11 +46,11 @@ function imagemA(event) {
   else if (imgselect.id === "luke") {
     imagem = "midia/img/car-lazy.png";
   }
-  
+
   else if (imgselect.id === "professor") {
     imagem = "midia/img/car-aéreo.png";
   }
-  
+
   else if (imgselect.id === "quadrilha") {
     imagem = "midia/img/car-quadrilha.png";
   }
@@ -53,12 +59,18 @@ function imagemA(event) {
   }
 }
 
+let name = "";
+
 // Iniciar o jogo
 let jogo = document.getElementById("jogo");
 
 let iniciar = document.getElementById("startGame");
 iniciar.addEventListener("click", telaJogo);
 function telaJogo() {
+
+  name = document.getElementById("nome").value
+  console.log("name registrado: ", name)
+
   document.getElementById("pi").style.display = "none";
   document.getElementById("quebraCabeça").style.display = "block";
 
@@ -135,8 +147,10 @@ function iniciarJogo() {
   tempoRestante = 120;
   if (dificuldade.value === "4") {
     tempo = 100; // Tempo para dificuldade 6x6
+    rank = "facil";
   } else if (dificuldade.value === "6") {
     tempo = 240; // Tempo para dificuldade 8x8
+    rank = "medio";
   } else if (dificuldade.value === "8") {
     tempo = 480; // Tempo para dificuldade 10x10
   }
@@ -239,6 +253,11 @@ function verificarVitoria() {
     console.log("🎉 Partida Vencida!");
     alert(`Parabéns! Você montou o carro completo! Em ${movimentos} movimentos e ${tempo - tempoRestante} segundos.`);
     encerrarPartida();
+    pontos = tempoRestante * 10 - movimentos * 5;
+    console.log("Pontuação final: ", pontos);
+
+    salvarPontuacao(name, pontos);
+    exibirRanking();
   }
 }
 
@@ -254,3 +273,49 @@ function encerrarPartida() {
   clearInterval(intervaloTempo);
 }
 
+
+
+function salvarPontuacao(name, pontos) {
+  if (!name || !pontos) {
+    console.error("Nome ou pontos inválidos:", name, pontos);
+    return;
+  }
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, pontos }),
+  })
+    .then(res => {
+      if (!res.ok) throw new Error(`Erro HTTP: ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      console.log("Pontuação salva:", data);
+    })
+    .catch(err => console.error("Erro ao salvar:", err));
+}
+
+function exibirRanking() {
+  fetch(API_URL) // substitua pela URL correta do seu MockAPI
+    .then(res => res.json())
+    .then(data => {
+      // Ordena por pontuação (maior primeiro)
+      data.sort((a, b) => b.pontos - a.pontos);
+
+      // Pega os 10 primeiros
+      const top10 = data.slice(0, 10);
+
+      const rankingDiv = document.getElementById("ranking");
+      rankingDiv.innerHTML = ""; // limpa antes de atualizar
+
+      top10.forEach((jogador, index) => {
+        rankingDiv.innerHTML += `
+          <p class="rank-option">${index + 1}. ${jogador.name} — ${jogador.pontos} pts</p>
+        `;
+      });
+    })
+    .catch(err => console.error("Erro ao carregar ranking:", err));
+}
+
+window.onload = exibirRanking;

@@ -8,6 +8,65 @@
   --items-visible: 3;
   --logoheight: 5vw;
 }
+/* Responsive design for screens smaller than 1000px */
+/*
+@media (max-width: 1000px) {
+  :root {
+    --gameSize: 90vw;
+    --optionSize: 10vw;
+    --logoheight: 20vw;
+  }
+
+  #startGame,
+  #start {
+    width: 50vw;
+    height: 7vh;
+    font-size: 20px;
+    margin-top: 5vh;
+  }
+
+  body {
+    font-size: 1vw;
+  }
+
+  #título {
+    font-size: 40px;
+    margin-top: 5vh;
+    margin-bottom: 2vh;
+    line-height: 30px;
+    padding-top: var(--logoheight);
+  }
+
+  #dificuldade {
+    font-size: 16px;
+    height: 5vh;
+  }
+
+  #footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  #opções {
+    margin-top: 1vh;
+    display: grid;
+    justify-content: center;
+    float: none;
+  }
+
+  .título {
+    margin-top: 10vh;
+  }
+
+  #gameTitle {
+    margin-top: 50vh;
+  }
+
+  h2 {
+    scroll-margin-top: var(--logoheight);
+  }
+}*/
 
 
 #logo-header {
@@ -21,13 +80,19 @@
   text-align: center;
   background-color: #7f16cf;
   padding: 0vh 0;
-  
-  position: fixed; /* Fixes the header relative to the viewport */
-  top: 0;          /* Positions the header at the top edge */
-  left: 0;         /* Positions the header at the left edge */
-  width: 100%;     /* Ensures the header spans the entire width */
-  z-index: 999;    /* Places the header above other content (optional, but recommended) */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow */
+
+  position: fixed;
+  /* Fixes the header relative to the viewport */
+  top: 0;
+  /* Positions the header at the top edge */
+  left: 0;
+  /* Positions the header at the left edge */
+  width: 100%;
+  /* Ensures the header spans the entire width */
+  z-index: 999;
+  /* Places the header above other content (optional, but recommended) */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional: Adds a subtle shadow */
 }
 
 #startGame {
@@ -73,14 +138,14 @@
   margin: 0 auto;
 }
 
-#título {
+.título {
   font-size: 40px;
   margin-top: 10vh;
   margin-bottom: 2vh;
   line-height: 40px;
 }
 
-#dificuldade {
+#dificuldade, #nome {
   margin-top: 5vh;
   font-size: 20px;
   color: #000000;
@@ -203,15 +268,24 @@ footer p {
   margin-top: 20px;
   margin-bottom: 10px;
 }
-footer{
+
+footer {
   bottom: 0;
   width: 100%;
-  background-color: #e2e2e2;
+  background-color: #dbdbdb;
   height: 5vh;
 }
-#footer{
+
+#footer {
   padding-top: 2vh;
 }
-h2{
+
+h2 {
   padding-top: 15vh;
+}
+
+.rank-option{
+  margin: 5px 0;
+  line-height: 3vh;
+  font-size: 30px;
 }
