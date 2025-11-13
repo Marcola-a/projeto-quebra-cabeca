@@ -281,6 +281,7 @@ footer p {
 }
 
 footer {
+  margin-top: 10vh;
   bottom: 0;
   width: 100%;
   background-color: #dbdbdb;
@@ -292,7 +293,7 @@ footer {
 }
 
 h2 {
-  padding-top: 15vh;
+  padding-top: 5vh;
 }
 
 .rank-option{
