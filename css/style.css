@@ -1,29 +1,162 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
+:root{
+  --gameSize: 75vw;
+  --optionSize: 10vw;
+}
 
-body {
-  background: #ffffff;
+
+#logo-header{
+  width: 20vw;
+  margin: 0 auto;
+  padding: 0px;
+  display: block;
+}
+
+#paginaInicial{
+  text-align: center;
+  background-color: #7f16cf;
+  padding: 0vh 0;
+}
+
+#startGame{
+  width: 30vw;
+  height: 7vh;
+  font-size: 25px;
+  margin-top: 5vh;
+  background-color: rgb(69, 0, 87);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+#start{
+  width: 30vw;
+  height: 7vh;
+  font-size: 25px;
+  margin-top: 5vh;
+  background-color: rgb(69, 0, 87);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: "Bebas Neue", sans-serif;
+}
+
+#opção{
+  width: var(--optionSize);
+  height: var(--optionSize);
+  margin: 20px;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+#texto{
+  font-size: 17px;
+  font-family: "Bebas Neue", sans-serif;
+  margin: 0 auto;
+}
+
+#título{
+  font-size: 40px;
+  margin-top: 10vh;
+  margin-bottom: 2vh;
+  line-height: 40px;
+}
+
+#dificuldade{
+  margin-top: 5vh;
+  font-size: 20px;
+  color: #000000;
+  border-radius: 10px;
+  height: 4vh;
+  font-family: "Bebas Neue", sans-serif;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#pi{
+  margin: 0 auto;
+  width: 60vw;
+  padding-bottom: 5vh;
+}
+
+
+
+body{
   color: rgb(69, 0, 87);
   font-family: "Bebas Neue", sans-serif;
   text-align: center;
   font-size: 3vw;
+  /*background-image: url("../midia/img/corrida-maluca-background.png");
+  background-repeat: no-repeat;
+  background-size: 100vw 100vh;
+  object-fit: cover;
+  backdrop-filter: blur(10px);*/
+}
+
+#jogo{
+  text-align: center;
+  margin: 0 auto;
 }
 
 #puzzle {
-  width: 99vw;
-  height: calc(99vw * 9 / 16);
+  width: var(--gameSize);
+  height: calc(var(--gameSize) * 9 / 16);
   aspect-ratio: 16/9;
   margin: 20px auto;
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 3x3 */
+  grid-template-columns: repeat(4, 1fr); /* 3x3 */
   gap: 0px;
   background-image: url("../midia/img/oficina.png");
   background-size: 100vw;
 }
 
+/* Estilo das peças do quebra-cabeça */
 .tile {
   background-image: url("../midia/img/car-oficina.png");
   background-size: 600% 600%;
   border: 1px solid #555;
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+.tile:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #0b58fd;
+  border-radius: 3px;
+}
+
+.tile.selecionada{
+  outline: 3px solid rgb(28, 50, 255);
+  transform: scale(1.02);
+}
+
+#timer{
+  text-align: left;
+}
+
+#moves{
+  text-align: right;
+}
+
+#quebraCabeça{
+  width: var(--gameSize);
+  margin: 0 auto;
+}
+
+.status{
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  margin-top: 10px;
+  line-height: 0px;
+}
+
+#gameTitle{
+  padding-top: 10vw;
+  padding-bottom: 3vh;
+  margin: 0 auto;
+  line-height: 0px;
 }

@@ -1,24 +1,57 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="utf-8">
   <title>Oficina — Quebra-cabeça</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <header>
-    <h1>Oficina — Corrida Maluca</h1>
-    <div id="hud">
-      <div id="timer">00:00</div>
-      <div id="moves">Movimentos: 0</div>
-      <button id="embaralhar">Embaralhar / Iniciar</button>
+
+  <header id="paginaInicial">
+    <img src="midia/img/logo-corrida.png" alt="logo corrida-maluca" id="logo-header">
+  </header>
+  <div id="pi">
+    <h2 id="título"><strong>Bem-vindo à Oficina da Corrida Maluca!</strong></h2>
+    <p id="texto">
+      Monte seu carro peça por peça e prepare-se para a corrida!
+
+      Você terá que organizar todas as partes corretamente antes do tempo acabar.
+      Cada movimento conta — quanto mais rápido montar o carro, melhor será sua pontuação.
+
+      Escolha sua dificuldade, ligue os motores e mostre que você é o verdadeiro mecânico da Corrida Maluca!
+    </p>
+    <select type="multiple" id="dificuldade" value="Selecionar Dificuldade">
+      <option value="4" id="facil">Fácil (4x4)</option>
+      <option value="6" id="medio">Médio (6x6)</option>
+      <option value="8" id="dificil">Difícil (8x8)</option>
+    </select>
+    <div>
+      <img src="midia/img/dick-option.jpg" alt="dick" id="opção">
+      <img src="midia/img/penélope-option.jpg" alt="penélope" id="opção">
+      <img src="midia/img/lazy-option.png" alt="lazy luke" id="opção">
+
     </div>
+    <p id="texto">Clique em “Jogar” para começar!</p>
+
+    <button id="startGame">Iniciar Jogo</button>
+  </div>
+
+
+  <header id="jogo">
+    <h1 id="gameTitle">Oficina — Corrida Maluca</h1>
+    <button id="start">Embaralhar</button>
   </header>
 
-  <main>
+  <div id="quebraCabeça">
+    <div class="status">
+    <div id="timer">00s</div>
+    <div id="moves">Movimentos: 0</div>
+    </div>
     <div id="puzzle" class="puzzle"></div>
     <div id="preview" class="preview"></div>
-  </main>
+  </div>
 
   <script>
     // parâmetro: caminho da imagem e tamanho da grade (ex.: 4 => 4x4)
@@ -27,4 +60,5 @@
   </script>
   <script src="js/jogo.js"></script>
 </body>
+
 </html>
